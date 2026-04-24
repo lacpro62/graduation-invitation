@@ -242,6 +242,8 @@
 
         .volume-icon {
             font-size: 1.2rem;
+            cursor: pointer;
+            user-select: none;
         }
 
         .volume-slider {
@@ -342,13 +344,53 @@
         // Volume slider event listener
         document.getElementById('vol-slider').addEventListener('input', (e) => {
             const vol = parseFloat(e.target.value);
-            document.getElementById('bgm-intro').volume = vol;
-            document.getElementById('bgm-loop').volume = vol;
+            const introMusic = document.getElementById('bgm-intro');
+            const loopMusic = document.getElementById('bgm-loop');
+            
+            introMusic.volume = vol;
+            loopMusic.volume = vol;
+            
+            // For mobile compatibility where volume property is ignored, use muted explicitly
+            if (vol === 0) {
+                introMusic.muted = true;
+                loopMusic.muted = true;
+            } else {
+                introMusic.muted = false;
+                loopMusic.muted = false;
+            }
             
             const icon = document.getElementById('vol-icon');
             if (vol === 0) icon.innerText = '🔇';
             else if (vol < 0.5) icon.innerText = '🔉';
             else icon.innerText = '🔊';
+        });
+
+        // Click icon to mute/unmute (especially helpful for mobile)
+        document.getElementById('vol-icon').addEventListener('click', () => {
+            const introMusic = document.getElementById('bgm-intro');
+            const loopMusic = document.getElementById('bgm-loop');
+            const volSlider = document.getElementById('vol-slider');
+            const icon = document.getElementById('vol-icon');
+
+            if (!introMusic.muted && introMusic.volume > 0) {
+                // Save current volume before muting
+                introMusic.dataset.savedVol = introMusic.volume;
+                introMusic.muted = true;
+                loopMusic.muted = true;
+                introMusic.volume = 0;
+                loopMusic.volume = 0;
+                volSlider.value = 0;
+                icon.innerText = '🔇';
+            } else {
+                // Restore volume
+                const savedVol = introMusic.dataset.savedVol ? parseFloat(introMusic.dataset.savedVol) : 0.15;
+                introMusic.muted = false;
+                loopMusic.muted = false;
+                introMusic.volume = savedVol;
+                loopMusic.volume = savedVol;
+                volSlider.value = savedVol;
+                icon.innerText = savedVol < 0.5 ? '🔉' : '🔊';
+            }
         });
 
         function showScreen(id) {
