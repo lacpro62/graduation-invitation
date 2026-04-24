@@ -252,6 +252,27 @@
             accent-color: var(--maroon);
         }
 
+        .back-btn {
+            background: var(--card-cream);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            color: var(--maroon);
+            font-size: 1rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin: 0 0 16px 0;
+            align-self: flex-start;
+        }
+        .back-btn:hover {
+            background: var(--border-color);
+            transform: translateX(-3px);
+        }
+
         @media (max-width: 768px) {
             .volume-control { display: none !important; }
         }
@@ -281,6 +302,12 @@
 
     <!-- Screen 3: Main Invitation -->
     <div id="screen-invite" class="screen">
+        <button class="back-btn" aria-label="Go Back" onclick="goBack()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+
         <div class="invitation-card">
             
             <div class="images-container">
@@ -406,15 +433,28 @@
             startBgMusic();
             currentLang = lang;
 
-            // Update photo
+            // Update photo & text
             const backPhoto = document.getElementById('back-photo');
+            const envText = document.getElementById('env-text');
+
             if (lang === 'vi') {
                 backPhoto.src = "https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/qMzIF_wzZw9e7EKy.png";
+                envText.innerText = "Mở thiệp";
             } else {
                 backPhoto.src = "https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/dVwMl_tHwZY7GEfd.png";
+                envText.innerText = "Open me";
             }
 
             showScreen('screen-envelope');
+        }
+
+        function goBack() {
+            showScreen('screen-lang');
+            
+            // Re-seal the envelope under the hood for when they choose a language again
+            setTimeout(() => {
+                document.querySelector('.envelope-wrapper').classList.remove('open');
+            }, 600);
         }
 
         function openEnvelope() {
