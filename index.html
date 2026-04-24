@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quynh Ngoc Le - Graduation Invitation</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-cream: #F7F1E6;
+            --card-cream: #FFF9F2;
+            --maroon: #500000;
+            --text-main: #2E2A26;
+            --text-sub: #6F665F;
+            --border-color: #E7DCCB;
+            --font-headings: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.8s ease-in-out;
+            text-align: center;
+        }
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Screen 1: Language Selection */
+        .lang-btn {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            padding: 12px 32px;
+            margin: 10px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+        .lang-btn:hover {
+            border-color: var(--maroon);
+            color: var(--maroon);
+            background-color: var(--card-cream);
+        }
+
+        /* Screen 2: Envelope */
+        .envelope-wrapper {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: var(--card-cream);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .envelope-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(80, 0, 0, 0.1);
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: var(--maroon);
+            border-bottom: 1px solid var(--border-color);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            transition: transform 0.5s ease;
+            transform-origin: top;
+            z-index: 2;
+        }
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        .envelope-text {
+            font-family: var(--font-headings);
+            font-style: italic;
+            color: var(--maroon);
+            margin-top: 40px;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Screen 3: Main Invitation */
+        .invitation-card {
+            background-color: var(--card-cream);
+            border-radius: 24px;
+            padding: 40px 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.03);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-text {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .images-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .images-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.4s ease;
+        }
+        .images-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .graduate-name {
+            font-family: var(--font-headings);
+            font-size: 2.5rem;
+            color: var(--maroon);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .degree-text {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 32px;
+            font-family: var(--font-headings);
+            font-style: italic;
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background-color: var(--maroon);
+            margin: 0 auto 24px auto;
+            opacity: 0.5;
+        }
+
+        .info-section {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            color: var(--text-sub);
+        }
+        .info-section p {
+            margin-bottom: 8px;
+        }
+        .info-highlight {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .message-section {
+            font-family: var(--font-headings);
+            font-style: italic;
+            color: var(--maroon);
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            padding: 0 20px;
+        }
+
+        .footer {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            margin-top: 24px;
+        }
+
+        /* Ornaments */
+        .icon-grad {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--maroon);
+        }
+
+        /* Volume Control */
+        .volume-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--card-cream);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            padding: 8px 16px;
+            display: none; /* hidden until music starts */
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            z-index: 1000;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .volume-icon {
+            font-size: 1.2rem;
+        }
+
+        .volume-slider {
+            width: 80px;
+            cursor: pointer;
+            accent-color: var(--maroon);
+        }
+
+        @media (max-width: 480px) {
+            .invitation-card { padding: 32px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Screen 1: Language Selection -->
+    <div id="screen-lang" class="screen active">
+        <h1 style="font-family: var(--font-headings); color: var(--maroon); margin-bottom: 2rem; font-size: 2rem;">Welcome</h1>
+        <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" onclick="setLanguage('vi')">Tiếng Việt</button>
+    </div>
+
+    <!-- Screen 2: Envelope -->
+    <div id="screen-envelope" class="screen">
+        <h2 id="env-instruction" style="font-family: var(--font-headings); margin-bottom: 2rem; font-weight: normal;"></h2>
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope-flap"></div>
+            <div class="envelope-text" id="env-text">Open me</div>
+        </div>
+    </div>
+
+    <!-- Screen 3: Main Invitation -->
+    <div id="screen-invite" class="screen">
+        <div class="invitation-card">
+            
+            <div class="images-container">
+                <img src="https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/OQeCKLl0QrORZ4gM.png" alt="Graduation Invitation Front">
+                <img id="back-photo" src="https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/dVwMl_tHwZY7GEfd.png" alt="Graduation Invitation Back">
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="bgm-intro" src="https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/tqhm6QIp9DT9QwPE.mpeg" preload="auto"></audio>
+    <audio id="bgm-loop" src="https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/xqpEV_71Ld_GMltj.mpeg" preload="auto" loop></audio>
+
+    <!-- Volume Control -->
+    <div class="volume-control" id="vol-control">
+        <span class="volume-icon" id="vol-icon">🔉</span>
+        <input type="range" class="volume-slider" id="vol-slider" min="0" max="1" step="0.01" value="0.1">
+    </div>
+
+    <script>
+        const content = {
+            en: {
+                //envInstruct: "Tap to open the invitation",
+                envOpen: "Tap to open",
+                header: "You're invited",
+                time: "May 5, 2026 • 9:00 AM",
+                message: `"With gratitude to family and friends for your love and support."`,
+                footer: "✨ Hope to see you there ✨"
+            },
+            vi: {
+                //envInstruct: "Chạm để mở thiệp mời",
+                envOpen: "Mở thiệp",
+                header: "Trân trọng kính mời",
+                time: "Ngày 5 Tháng 5, 2026 • 9:00 Sáng",
+                message: `"Xin chân thành cảm ơn gia đình và bạn bè vì đã luôn yêu thương và ủng hộ."`,
+                footer: "✨ Rất mong được gặp mọi người ✨"
+            }
+        };
+
+        let currentLang = 'en';
+        let audioStarted = false;
+
+        function startBgMusic() {
+            if (audioStarted) return;
+            audioStarted = true;
+            
+            const introMusic = document.getElementById('bgm-intro');
+            const loopMusic = document.getElementById('bgm-loop');
+            
+            // Set initial volume
+            introMusic.volume = 0.1;
+            loopMusic.volume = 0.1;
+
+            // Show volume control when music starts
+            document.getElementById('vol-control').style.display = 'flex';
+
+            introMusic.play().catch(e => console.log("Audio playback failed:", e));
+            
+            introMusic.addEventListener('ended', () => {
+                loopMusic.play().catch(e => console.log("Audio loop fallback failed:", e));
+            });
+        }
+
+        // Volume slider event listener
+        document.getElementById('vol-slider').addEventListener('input', (e) => {
+            const vol = e.target.value;
+            document.getElementById('bgm-intro').volume = vol;
+            document.getElementById('bgm-loop').volume = vol;
+            
+            const icon = document.getElementById('vol-icon');
+            if (vol == 0) icon.innerText = '🔇';
+            else if (vol < 0.5) icon.innerText = '🔉';
+            else icon.innerText = '🔊';
+        });
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function setLanguage(lang) {
+            startBgMusic();
+            currentLang = lang;
+
+            // Update photo
+            const backPhoto = document.getElementById('back-photo');
+            if (lang === 'vi') {
+                backPhoto.src = "https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/qMzIF_wzZw9e7EKy.png";
+            } else {
+                backPhoto.src = "https://pub-8f1799f54f204b18b4d55cfeb052b923.r2.dev/graduation/ae7103a2-5205-450e-bb3c-32ba2f8e1e35/dVwMl_tHwZY7GEfd.png";
+            }
+
+            showScreen('screen-envelope');
+        }
+
+        function openEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            envelope.classList.add('open');
+            
+            // Wait for flap animation, then show invitation
+            setTimeout(() => {
+                showScreen('screen-invite');
+            }, 600); // Wait 600ms
+        }
+    </script>
+</body>
+</html>
